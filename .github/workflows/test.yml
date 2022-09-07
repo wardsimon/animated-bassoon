@@ -23,6 +23,10 @@ jobs:
           credentials:
              username: wardsimon
              password: ${{  secrets.CONTAINER_TOKEN }}
+          options: >-
+            --mac-address 02:42:ac:11:00:02
+            
+          
       steps:
           - name: super-step
             shell: bash
@@ -30,4 +34,5 @@ jobs:
               # Whatever commands you want to run here using the container with your
               # new Docker image at ghcr.io!>
               echo "--This is running in my custom Docker image--"
+              ifconfig
               matlab -V
