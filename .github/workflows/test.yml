@@ -26,12 +26,14 @@ jobs:
           options: >-
             --mac-address 02:42:ac:11:00:02
       steps:
-          - name: super-step
+          - name: setup-step
             shell: bash
             run: |
-              # Whatever commands you want to run here using the container with your
-              # new Docker image at ghcr.io!>
               echo "--This is running in my custom Docker image--"
               ifconfig
-              sudo echo ${{  secrets.LIC_DAT }} > /usr/local/MATLAB/R2022a/licenses/licence.dat
+              ls /usr/local/MATLAB/R2022a/licenses/
+              sudo echo ${{  secrets.LIC_DAT }} > /usr/local/MATLAB/R2022a/licenses/license.lic
+          - name: test-run
+            shell: bash
+            run: |
               matlab -V
