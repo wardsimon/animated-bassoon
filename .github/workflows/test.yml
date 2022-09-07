@@ -23,16 +23,24 @@ jobs:
           credentials:
              username: wardsimon
              password: ${{  secrets.CONTAINER_TOKEN }}
+          volumes:
+            - ./:/repo
           options: >-
             --mac-address 02:42:ac:11:00:02
       steps:
-          - name: setup-step
+          - name: Generate_Licence
+            shell: bash
+            run: |
+               ls /
+               ls /repo
+               mkdir /opt/matlab/R2022a/licenses/
+               gpg -d --batch --passphrase ${{  secrets.LIC_DAT }} /repo/license.lic.gpg > /opt/matlab/R2022a/licenses/license.lic
+          - name: test-step
             shell: bash
             run: |
               echo "--This is running in my custom Docker image--"
               ifconfig
-              sudo mkdir /opt/matlab/R2022a/licenses/
-              sudo echo ${{  secrets.LIC_DAT }} > /opt/matlab/R2022a/licenses/license.lic
+              ls /opt/matlab/R2022a/licenses/
           - name: test-run
             shell: bash
             run: |
