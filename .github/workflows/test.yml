@@ -31,11 +31,9 @@ jobs:
             run: |
               echo "--This is running in my custom Docker image--"
               ifconfig
-              which matalab
-              ls /usr/local/MATLAB/R2022a/
-              ls /usr/local/MATLAB/R2022a/licenses/
-              sudo echo ${{  secrets.LIC_DAT }} > /usr/local/MATLAB/R2022a/licenses/license.lic
+              sudo mkdir /opt/matlab/R2022a/licenses/
+              sudo echo ${{  secrets.LIC_DAT }} > /opt/matlab/R2022a/licenses/license.lic
           - name: test-run
             shell: bash
             run: |
-              matlab -V
+              /opt/matlab/R2022a/bin/matlab -V
