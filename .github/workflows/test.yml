@@ -23,18 +23,17 @@ jobs:
           credentials:
              username: wardsimon
              password: ${{  secrets.CONTAINER_TOKEN }}
-          volumes:
-            - ./:/repo
           options: >-
             --mac-address 02:42:ac:11:00:02
       steps:
+          - name: Check out Repo
+            uses: actions/checkout@v2
           - name: Generate_Licence
             shell: bash
             run: |
-               ls /
-               ls /repo
+               ls ./
                mkdir /opt/matlab/R2022a/licenses/
-               gpg -d --batch --passphrase ${{  secrets.LIC_DAT }} /repo/license.lic.gpg > /opt/matlab/R2022a/licenses/license.lic
+               gpg -d --batch --passphrase ${{  secrets.LIC_DAT }} ./license.lic.gpg > /opt/matlab/R2022a/licenses/license.lic
           - name: test-step
             shell: bash
             run: |
