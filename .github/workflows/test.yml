@@ -35,7 +35,8 @@ jobs:
             shell: bash
             run: |
                ls ./
-               mkdir /opt/matlab/R2022a/licenses/
+               sudo mkdir /opt/matlab/R2022a/licenses/
+               sudo chmod -R 777 /opt/matlab/R2022a/licenses/
                gpg -d --batch --passphrase ${{  secrets.LIC_DAT }} ./license.lic.gpg > /opt/matlab/R2022a/licenses/license.lic
           - name: test-step
             shell: bash
