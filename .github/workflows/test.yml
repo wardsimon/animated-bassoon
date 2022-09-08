@@ -38,13 +38,18 @@ jobs:
                sudo mkdir /opt/matlab/R2022a/licenses/
                sudo chmod -R 777 /opt/matlab/R2022a/licenses/
                gpg -d --batch --passphrase ${{  secrets.LIC_KEY }} ./license.lic.gpg > /opt/matlab/R2022a/licenses/license.lic
-          - name: test-step
-            shell: bash
-            run: |
-              echo "--This is running in my custom Docker image--"
-              ifconfig
-              ls /opt/matlab/R2022a/licenses/
+          - name: Checkout tools repo
+            uses: actions/checkout@v3
+            with:
+              repository: wardsimon/cautious-happiness
+              path: my-tools
+          - name: Checkout SpinW repo
+            uses: actions/checkout@v3
+            with:
+              repository: SpinW/spinw
+              path: spinw_repo
           - name: test-run
             shell: bash
             run: |
-              /opt/matlab/R2022a/bin/matlab -V
+              /opt/matlab/R2022a/bin/matlab -nodisplay -nosplash - nodesktop -r "print(ver); exit"
+
