@@ -26,6 +26,9 @@ jobs:
           options: >-
             --mac-address 02:42:ac:11:00:02
       steps:
+          - name: Set permissions
+            run: |
+              sudo chmod -R 777 /__w
           - name: Check out Repo
             uses: actions/checkout@v2
           - name: Generate_Licence
