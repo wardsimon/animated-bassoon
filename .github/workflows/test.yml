@@ -24,14 +24,14 @@ jobs:
              username: wardsimon
              password: ${{  secrets.CONTAINER_TOKEN }}
           options: >-
-            --mac-address 02:42:ac:11:00:02
+            --mac-address ${{  secrets.MAC_ADDR }}
       steps:
           - name: Set permissions
             run: |
               sudo chmod -R 777 /__w
-          - name: Check out Repo
+          - name: Check out this Repo
             uses: actions/checkout@v2
-          - name: Generate_Licence
+          - name: Generate Licence
             shell: bash
             run: |
                ls ./
@@ -47,9 +47,38 @@ jobs:
             uses: actions/checkout@v3
             with:
               repository: SpinW/spinw
-              path: spinw_repo
-          - name: test-run
+              path: spinw_scr
+          - name: Move components
             shell: bash
             run: |
-              /opt/matlab/R2022a/bin/matlab -nodisplay -nosplash - nodesktop -r "ver; exit"
+              mkdir scr
+              cp ./my-tools/* ./scr
+              mkdir scr/CTF
+              mkdir scr/CTF/SpinW
+              cp -R spinw_scr/swfiles scr/CTF/SpinW
+              cp -R spinw_scr/dat_files scr/CTF/SpinW
+              cp -R spinw_scr/external scr/CTF/SpinW
+          - name: Build
+            shell: bash
+            run: |
+              /opt/matlab/R2022a/bin/mcc  -W python:pySpinW -d "./pySpinW" -v
+                -a "scr/CTF"
+                "scr/call.m"
+                "scr/call_method.m"
+                "scr/thinwrapper.m"
+                "scr/wrap_obj.m"
+                "scr/has_thin_members.m"
+                "scr/recfind.m"
+                "scr/getArgOut.m"
+                "scr/get_method_refs.m"
+                "scr/get_global.m"
+                "scr/set_global.m"
+                "scr/waitforgui.m"
+                "scr/pythonFunctionWrapper.m"
+                "scr/call_python_m.m"
+                "scr/pyclasswrapper.m"
+                "scr/check_wrapped_function.m"
+                # "$<TARGET_FILE_DIR:call_python>/call_python.${Matlab_MEX_EXTENSION}"
+                # "$<TARGET_FILE_DIR:pythonRemoveFuncKey>/pythonRemoveFuncKey.${Matlab_MEX_EXTENSION}"
+            #   /opt/matlab/R2022a/bin/matlab -nodisplay -nosplash - nodesktop -r "ver; exit"
 
